@@ -1,0 +1,8 @@
+PLAN_VALIDATION_REPORT
+file=tmp/manual-smoke/weekly-plan.json
+errors=0
+warnings=2
+
+WARNINGS:
+- Calories off target by >250 kcal (1122.9 vs 1600).
+- Protein below target by >20g (72.6 vs 95).

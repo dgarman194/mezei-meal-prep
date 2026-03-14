@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mezei Meal Prep Planner</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <h1>Mezei Meal Prep Planner</h1>
+      <p>Mobile-first weekly planning: inventory in, practical tasty prep plan out.</p>
+    </header>
+
+    <section class="card">
+      <h2>Weekly Intake</h2>
+      <form id="planner-form">
+        <div class="grid two">
+          <label>Week of
+            <input type="date" name="week_of" required />
+          </label>
+          <label>Max prep minutes
+            <input type="number" name="max_prep_minutes" min="30" step="5" />
+          </label>
+          <label>Daily calorie target
+            <input type="number" name="daily_calorie_target" min="1000" step="25" />
+          </label>
+          <label>Daily protein target (g)
+            <input type="number" name="daily_protein_target_g" min="60" step="1" />
+          </label>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" name="shrimp_ok" />
+          Shrimp allowed this week
+        </label>
+
+        <div class="grid one">
+          <label>Likes (comma-separated)
+            <input type="text" name="likes" placeholder="lemon, curry, spicy" />
+          </label>
+          <label>Dislikes (comma-separated)
+            <input type="text" name="dislikes" placeholder="mushroom, very spicy" />
+          </label>
+          <label>Notes
+            <textarea name="notes" rows="2" placeholder="Anything important this week"></textarea>
+          </label>
+        </div>
+
+        <div class="inventory-section">
+          <h3>Fridge</h3>
+          <div id="fridge-rows" class="rows"></div>
+          <button type="button" class="secondary" data-add-row="fridge">+ Add fridge item</button>
+        </div>
+
+        <div class="inventory-section">
+          <h3>Pantry</h3>
+          <div id="pantry-rows" class="rows"></div>
+          <button type="button" class="secondary" data-add-row="pantry">+ Add pantry item</button>
+        </div>
+
+        <div class="inventory-section">
+          <h3>Freezer</h3>
+          <div id="freezer-rows" class="rows"></div>
+          <button type="button" class="secondary" data-add-row="freezer">+ Add freezer item</button>
+        </div>
+
+        <button type="submit" class="primary submit">Generate Weekly Plan</button>
+      </form>
+    </section>
+
+    <section class="card hidden" id="result-validation">
+      <h2>Validation</h2>
+      <p class="status" id="validation-status"></p>
+      <ul id="validation-errors"></ul>
+      <ul class="warn-list" id="validation-warnings"></ul>
+      <div class="downloads" id="downloads"></div>
+    </section>
+
+    <section class="card hidden" id="result-meals">
+      <h2>Meal Lineup</h2>
+      <ul id="meal-lineup"></ul>
+    </section>
+
+    <section class="card hidden" id="result-schedule">
+      <h2>7-Day Schedule</h2>
+      <div class="schedule" id="schedule"></div>
+    </section>
+
+    <section class="card hidden" id="result-prep">
+      <h2>Sunday Prep Steps</h2>
+      <ol id="prep-steps"></ol>
+    </section>
+
+    <section class="card hidden" id="result-shopping">
+      <h2>Shopping Additions</h2>
+      <div id="shopping-list"></div>
+    </section>
+
+    <section class="card hidden" id="result-flavor">
+      <h2>Make It Taste Great</h2>
+      <h4>Sauce Rotation</h4>
+      <ul id="sauce-rotation"></ul>
+      <h4>Meal Upgrades</h4>
+      <ul id="meal-upgrades"></ul>
+    </section>
+
+    <section class="card hidden" id="result-macros">
+      <h2>Macro Summary</h2>
+      <ul id="macro-summary"></ul>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

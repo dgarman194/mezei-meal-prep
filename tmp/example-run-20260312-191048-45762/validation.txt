@@ -1,0 +1,4 @@
+PLAN_VALIDATION_REPORT
+file=/Users/dakotagarman/.openclaw/workspace/projects/mezei-weekly-meal-prep/tmp/example-run-20260312-191048-45762/weekly-plan.json
+errors=0
+warnings=0

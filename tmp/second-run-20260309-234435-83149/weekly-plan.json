@@ -1,0 +1,184 @@
+{
+  "week_of": "2026-03-22",
+  "selected_meals": [
+    {
+      "name": "Lentil Spinach Curry Bowls",
+      "type": "vegetarian",
+      "ingredients": [
+        "lentils",
+        "spinach",
+        "onion",
+        "garlic",
+        "coconut milk",
+        "tomato"
+      ],
+      "kcal": 430,
+      "protein_g": 24,
+      "prep": "batch"
+    },
+    {
+      "name": "Black Bean Taco Bowls",
+      "type": "vegetarian",
+      "ingredients": [
+        "black beans",
+        "brown rice",
+        "corn",
+        "salsa",
+        "avocado",
+        "lime"
+      ],
+      "kcal": 460,
+      "protein_g": 20,
+      "prep": "batch"
+    },
+    {
+      "name": "Cottage Cheese Power Snack Plate",
+      "type": "vegetarian",
+      "ingredients": [
+        "cottage cheese",
+        "carrot",
+        "cucumber",
+        "hummus"
+      ],
+      "kcal": 260,
+      "protein_g": 21,
+      "prep": "quick"
+    },
+    {
+      "name": "Greek Yogurt Overnight Oats",
+      "type": "vegetarian",
+      "ingredients": [
+        "greek yogurt",
+        "oats",
+        "chia seeds",
+        "berries"
+      ],
+      "kcal": 340,
+      "protein_g": 22,
+      "prep": "batch"
+    },
+    {
+      "name": "Chickpea Greek Salad Boxes",
+      "type": "vegetarian",
+      "ingredients": [
+        "chickpeas",
+        "cucumber",
+        "tomato",
+        "feta",
+        "olive oil",
+        "lemon"
+      ],
+      "kcal": 390,
+      "protein_g": 19,
+      "prep": "batch"
+    }
+  ],
+  "schedule": [
+    {
+      "day": "Monday",
+      "lunch": "Lentil Spinach Curry Bowls",
+      "dinner": "Cottage Cheese Power Snack Plate"
+    },
+    {
+      "day": "Tuesday",
+      "lunch": "Black Bean Taco Bowls",
+      "dinner": "Greek Yogurt Overnight Oats"
+    },
+    {
+      "day": "Wednesday",
+      "lunch": "Cottage Cheese Power Snack Plate",
+      "dinner": "Chickpea Greek Salad Boxes"
+    },
+    {
+      "day": "Thursday",
+      "lunch": "Greek Yogurt Overnight Oats",
+      "dinner": "Lentil Spinach Curry Bowls"
+    },
+    {
+      "day": "Friday",
+      "lunch": "Chickpea Greek Salad Boxes",
+      "dinner": "Black Bean Taco Bowls"
+    },
+    {
+      "day": "Saturday",
+      "lunch": "Lentil Spinach Curry Bowls",
+      "dinner": "Cottage Cheese Power Snack Plate"
+    },
+    {
+      "day": "Sunday",
+      "lunch": "Black Bean Taco Bowls",
+      "dinner": "Greek Yogurt Overnight Oats"
+    }
+  ],
+  "shopping_list": {
+    "Misc": [
+      "carrot",
+      "greek yogurt"
+    ],
+    "Pantry": [
+      "chia seeds",
+      "chickpeas",
+      "coconut milk",
+      "hummus",
+      "lentils",
+      "oats",
+      "olive oil",
+      "salsa"
+    ],
+    "Produce": [
+      "avocado",
+      "berries",
+      "corn",
+      "cucumber",
+      "garlic",
+      "lemon",
+      "lime",
+      "onion",
+      "tomato"
+    ],
+    "Protein": [
+      "feta"
+    ]
+  },
+  "use_up_first": [
+    {
+      "item": "spinach",
+      "expires_in_days": 2
+    },
+    {
+      "item": "broccoli",
+      "expires_in_days": 4
+    },
+    {
+      "item": "cottage cheese",
+      "expires_in_days": 7
+    }
+  ],
+  "prep_steps": [
+    "Cook base grains/legumes first (rice, quinoa, lentils, beans).",
+    "Chop and roast/saut\u00e9 all vegetables in one batch.",
+    "Prepare 2 sauces/dressings to keep meals varied.",
+    "Cook proteins (tofu/egg whites/shrimp) and portion by meal.",
+    "Prep daily protein snacks (yogurt/cottage-cheese cups, hummus + veg) to close macro gaps.",
+    "Assemble grab-and-go containers for Mon-Wed; freeze Thu-Sun portions as needed.",
+    "Reserve quick rescue meals for busiest days: Cottage Cheese Power Snack Plate."
+  ],
+  "fallback_swaps": [
+    "No spinach -> use kale or romaine in bowls/salads.",
+    "No quinoa -> use brown rice or farro.",
+    "No shrimp -> use tofu or extra chickpeas.",
+    "No greek yogurt -> use cottage cheese or skyr.",
+    "No bell pepper -> use zucchini or broccoli."
+  ],
+  "macro_summary": {
+    "target_calories": 1550,
+    "target_protein_g": 100,
+    "estimated_avg_daily_calories": 1330.0,
+    "estimated_avg_daily_protein_g": 82.7,
+    "calorie_delta": -220.0,
+    "protein_delta_g": -17.3
+  },
+  "validation_hints": [
+    "Protein may be low; add yogurt/cottage cheese/tofu/shrimp booster."
+  ]
+}

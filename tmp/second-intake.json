@@ -1,0 +1,29 @@
+{
+  "week_of": "2026-03-22",
+  "goals": {
+    "daily_calorie_target": 1550,
+    "daily_protein_target_g": 100,
+    "meals_per_day": 3
+  },
+  "preferences": {
+    "vegetarian": true,
+    "shrimp_ok": false,
+    "max_prep_minutes": 90,
+    "likes": ["mexican", "mediterranean"],
+    "dislikes": ["egg"],
+    "notes": "No shrimp this week"
+  },
+  "inventory": {
+    "fridge": [
+      {"item": "spinach", "qty": "1 bag", "expires_in_days": 2},
+      {"item": "cottage cheese", "qty": "16 oz", "expires_in_days": 7},
+      {"item": "broccoli", "qty": "2 heads", "expires_in_days": 4}
+    ],
+    "pantry": [
+      {"item": "black beans", "qty": "3 cans", "expires_in_days": null},
+      {"item": "quinoa", "qty": "2 cups", "expires_in_days": null},
+      {"item": "brown rice", "qty": "2 cups", "expires_in_days": null}
+    ],
+    "freezer": []
+  }
+}

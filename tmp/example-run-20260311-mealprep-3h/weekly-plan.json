@@ -1,0 +1,299 @@
+{
+  "week_of": "2026-03-15",
+  "selected_meals": [
+    {
+      "name": "Shrimp Zucchini Skillet with Quinoa",
+      "type": "shrimp",
+      "ingredients": [
+        "shrimp",
+        "zucchini",
+        "quinoa",
+        "garlic",
+        "lemon",
+        "olive oil"
+      ],
+      "kcal": 410,
+      "protein_g": 33,
+      "prep": "quick",
+      "flavor_tags": [
+        "lemon-herb",
+        "bright",
+        "quick"
+      ],
+      "taste_upgrade": "Marinate shrimp 10 min with lemon, paprika, garlic, then finish with parsley."
+    },
+    {
+      "name": "Lentil Spinach Curry Bowls",
+      "type": "vegetarian",
+      "ingredients": [
+        "lentils",
+        "spinach",
+        "onion",
+        "garlic",
+        "coconut milk",
+        "tomato"
+      ],
+      "kcal": 430,
+      "protein_g": 24,
+      "prep": "batch",
+      "flavor_tags": [
+        "curry",
+        "warm",
+        "savory"
+      ],
+      "taste_upgrade": "Bloom curry powder + cumin in oil, finish with lemon and cilantro."
+    },
+    {
+      "name": "Tofu Veggie Stir-Fry + Brown Rice",
+      "type": "vegetarian",
+      "ingredients": [
+        "tofu",
+        "broccoli",
+        "bell pepper",
+        "brown rice",
+        "soy sauce",
+        "garlic"
+      ],
+      "kcal": 470,
+      "protein_g": 30,
+      "prep": "batch",
+      "flavor_tags": [
+        "soy-ginger",
+        "umami",
+        "savory"
+      ],
+      "taste_upgrade": "Pan-sear tofu hard, then glaze with soy-ginger-garlic and chili crisp."
+    },
+    {
+      "name": "Egg White Veggie Muffins + Fruit",
+      "type": "vegetarian",
+      "ingredients": [
+        "egg whites",
+        "spinach",
+        "bell pepper",
+        "onion"
+      ],
+      "kcal": 280,
+      "protein_g": 23,
+      "prep": "batch",
+      "flavor_tags": [
+        "savory",
+        "light",
+        "quick"
+      ],
+      "taste_upgrade": "Saut\u00e9 veggies first and add feta/chili flakes for stronger flavor."
+    },
+    {
+      "name": "Chickpea Greek Salad Boxes",
+      "type": "vegetarian",
+      "ingredients": [
+        "chickpeas",
+        "cucumber",
+        "tomato",
+        "feta",
+        "olive oil",
+        "lemon"
+      ],
+      "kcal": 390,
+      "protein_g": 19,
+      "prep": "batch",
+      "flavor_tags": [
+        "mediterranean",
+        "bright",
+        "fresh"
+      ],
+      "taste_upgrade": "Salt cucumbers first, then toss with lemon zest + oregano vinaigrette."
+    }
+  ],
+  "schedule": [
+    {
+      "day": "Monday",
+      "lunch": "Shrimp Zucchini Skillet with Quinoa",
+      "dinner": "Tofu Veggie Stir-Fry + Brown Rice"
+    },
+    {
+      "day": "Tuesday",
+      "lunch": "Lentil Spinach Curry Bowls",
+      "dinner": "Egg White Veggie Muffins + Fruit"
+    },
+    {
+      "day": "Wednesday",
+      "lunch": "Tofu Veggie Stir-Fry + Brown Rice",
+      "dinner": "Chickpea Greek Salad Boxes"
+    },
+    {
+      "day": "Thursday",
+      "lunch": "Egg White Veggie Muffins + Fruit",
+      "dinner": "Shrimp Zucchini Skillet with Quinoa"
+    },
+    {
+      "day": "Friday",
+      "lunch": "Chickpea Greek Salad Boxes",
+      "dinner": "Lentil Spinach Curry Bowls"
+    },
+    {
+      "day": "Saturday",
+      "lunch": "Shrimp Zucchini Skillet with Quinoa",
+      "dinner": "Tofu Veggie Stir-Fry + Brown Rice"
+    },
+    {
+      "day": "Sunday",
+      "lunch": "Lentil Spinach Curry Bowls",
+      "dinner": "Egg White Veggie Muffins + Fruit"
+    }
+  ],
+  "shopping_list": {
+    "Pantry": [
+      "coconut milk",
+      "quinoa",
+      "soy sauce"
+    ],
+    "Produce": [
+      "broccoli",
+      "cucumber",
+      "lemon",
+      "onion",
+      "tomato"
+    ],
+    "Protein": [
+      "egg whites",
+      "feta"
+    ]
+  },
+  "use_up_first": [
+    {
+      "item": "spinach",
+      "expires_in_days": 3
+    },
+    {
+      "item": "zucchini",
+      "expires_in_days": 4
+    },
+    {
+      "item": "tofu",
+      "expires_in_days": 5
+    },
+    {
+      "item": "bell pepper",
+      "expires_in_days": 5
+    },
+    {
+      "item": "greek yogurt",
+      "expires_in_days": 6
+    },
+    {
+      "item": "garlic",
+      "expires_in_days": 10
+    },
+    {
+      "item": "shrimp",
+      "expires_in_days": 30
+    }
+  ],
+  "prep_steps": [
+    "Cook base grains/legumes first (rice, quinoa, lentils, beans).",
+    "Chop and roast/saut\u00e9 all vegetables in one batch (leave crunchy salad veg raw).",
+    "Mix two bold sauces (example: lemon-herb yogurt + chipotle-lime) for variety.",
+    "Cook proteins (tofu/egg whites/shrimp) and portion by meal.",
+    "Prep daily protein snacks (yogurt/cottage-cheese cups, hummus + veg) to close macro gaps.",
+    "Assemble grab-and-go containers for Mon-Wed; freeze Thu-Sun portions as needed.",
+    "Reserve quick rescue meals for busiest days: Shrimp Zucchini Skillet with Quinoa."
+  ],
+  "fallback_swaps": [
+    "No spinach -> use kale or romaine in bowls/salads.",
+    "No quinoa -> use brown rice or farro.",
+    "No shrimp -> use tofu or extra chickpeas.",
+    "No greek yogurt -> use cottage cheese or skyr.",
+    "No bell pepper -> use zucchini or broccoli.",
+    "Low flavor? Add acid (lemon/lime/vinegar), salt, and chili before adding extra oil."
+  ],
+  "flavor_playbook": {
+    "weekly_sauce_rotation": [
+      {
+        "name": "Lemon-Herb Yogurt Sauce",
+        "works_with": [
+          "bowls",
+          "salads",
+          "shrimp",
+          "eggs"
+        ],
+        "formula": "Greek yogurt + lemon juice/zest + garlic + salt + dill/parsley"
+      },
+      {
+        "name": "Chipotle-Lime Sauce",
+        "works_with": [
+          "taco bowls",
+          "tofu",
+          "roasted veggies"
+        ],
+        "formula": "Greek yogurt or light mayo + chipotle + lime + cumin + pinch honey"
+      }
+    ],
+    "finishers": [
+      "Acid: lemon/lime juice or red wine vinegar at the end",
+      "Heat: chili flakes, chili crisp, or jalape\u00f1o",
+      "Herb: cilantro/parsley/dill for freshness",
+      "Crunch: toasted nuts/seeds or crispy chickpeas",
+      "Creamy contrast: yogurt sauce, feta, tahini, or hummus drizzle"
+    ],
+    "meal_upgrades": [
+      {
+        "meal": "Shrimp Zucchini Skillet with Quinoa",
+        "flavor_tags": [
+          "lemon-herb",
+          "bright",
+          "quick"
+        ],
+        "taste_upgrade": "Marinate shrimp 10 min with lemon, paprika, garlic, then finish with parsley."
+      },
+      {
+        "meal": "Lentil Spinach Curry Bowls",
+        "flavor_tags": [
+          "curry",
+          "warm",
+          "savory"
+        ],
+        "taste_upgrade": "Bloom curry powder + cumin in oil, finish with lemon and cilantro."
+      },
+      {
+        "meal": "Tofu Veggie Stir-Fry + Brown Rice",
+        "flavor_tags": [
+          "soy-ginger",
+          "umami",
+          "savory"
+        ],
+        "taste_upgrade": "Pan-sear tofu hard, then glaze with soy-ginger-garlic and chili crisp."
+      },
+      {
+        "meal": "Egg White Veggie Muffins + Fruit",
+        "flavor_tags": [
+          "savory",
+          "light",
+          "quick"
+        ],
+        "taste_upgrade": "Saut\u00e9 veggies first and add feta/chili flakes for stronger flavor."
+      },
+      {
+        "meal": "Chickpea Greek Salad Boxes",
+        "flavor_tags": [
+          "mediterranean",
+          "bright",
+          "fresh"
+        ],
+        "taste_upgrade": "Salt cucumbers first, then toss with lemon zest + oregano vinaigrette."
+      }
+    ],
+    "flavor_variety_score": 11
+  },
+  "macro_summary": {
+    "target_calories": 1600,
+    "target_protein_g": 95,
+    "estimated_avg_daily_calories": 1372.9,
+    "estimated_avg_daily_protein_g": 92.6,
+    "calorie_delta": -227.1,
+    "protein_delta_g": -2.4
+  },
+  "validation_hints": [
+    "No major flags from heuristic checks."
+  ]
+}
