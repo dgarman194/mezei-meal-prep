@@ -122,12 +122,21 @@
     </section>
 
     <section class="card hidden" id="result-validation">
-      <h2>Validation</h2>
+      <div class="section-head">
+        <div>
+          <h2>Plan Status</h2>
+          <p class="section-subtitle">Quick read on whether the week is ready and how close it is to the nutrition target.</p>
+        </div>
+      </div>
       <p class="status" id="validation-status"></p>
+      <div class="summary-chips" id="summary-chips"></div>
       <ul id="validation-errors"></ul>
       <ul class="warn-list" id="validation-warnings"></ul>
-      <div class="downloads" id="downloads"></div>
-      <p class="section-subtitle hidden" id="calendar-note">Download the calendar file and open it on iPhone/Mac to add the week into Apple Calendar.</p>
+      <div class="downloads-wrap">
+        <h3>Exports</h3>
+        <div class="downloads" id="downloads"></div>
+        <p class="section-subtitle hidden" id="calendar-note">Download the calendar file and open it on iPhone/Mac to add the week into Apple Calendar.</p>
+      </div>
     </section>
 
     <section class="card hidden" id="result-meals">
@@ -147,6 +156,7 @@
           <p class="section-subtitle">Every day includes breakfast, lunch, and dinner.</p>
         </div>
       </div>
+      <div class="week-overview" id="week-overview"></div>
       <div class="schedule" id="schedule"></div>
     </section>
 
@@ -164,6 +174,20 @@
       <h2>Make It Taste Great</h2>
       <h4>Sauce Rotation</h4>
       <ul id="sauce-rotation"></ul>
+      <h4>Meal Upgrades</h4>
+      <ul id="meal-upgrades"></ul>
+    </section>
+
+    <section class="card hidden" id="result-macros">
+      <h2>Macro Summary</h2>
+      <ul id="macro-summary"></ul>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
+on"></ul>
       <h4>Meal Upgrades</h4>
       <ul id="meal-upgrades"></ul>
     </section>

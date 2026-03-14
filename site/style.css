@@ -259,6 +259,62 @@ button.ghost {
   color: #465467;
 }
 
+.week-overview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.overview-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.overview-label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.overview-value {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.summary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+
+.summary-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: #f3f6fb;
+  border: 1px solid #e3e8ef;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.downloads-wrap {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #eef2f7;
+}
+
 .schedule {
   display: grid;
   grid-template-columns: 1fr;
@@ -267,16 +323,17 @@ button.ghost {
 
 .schedule-card {
   border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 12px;
-  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfcfe 100%);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
 }
 
 .schedule-slot {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 9px 0;
+  gap: 4px;
+  padding: 10px 0;
   border-top: 1px solid #eef2f7;
 }
 
@@ -337,6 +394,14 @@ button.ghost {
     align-items: stretch;
   }
 
+  .week-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-card h3 {
+    font-size: 1.05rem;
+  }
+
   button.small,
   button.secondary,
   button.ghost {
@@ -361,5 +426,15 @@ button.ghost {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  }
+}
+
+@media (min-width: 980px) {
+  .schedule {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .week-overview {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

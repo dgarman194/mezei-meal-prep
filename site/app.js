@@ -742,6 +742,27 @@ function renderMealCards(plan) {
   });
 }
 
+function renderWeekOverview(plan) {
+  const weekOverview = document.getElementById('week-overview');
+  if (!weekOverview) return;
+  weekOverview.innerHTML = '';
+  const meals = plan.selected_meals?.all || [];
+  const uniqueIngredients = new Set();
+  meals.forEach((meal) => (meal.ingredients || []).forEach((ingredient) => uniqueIngredients.add(ingredient)));
+  const summaryRows = [
+    ['Avg calories/day', `${plan.macro_summary.estimated_avg_daily_calories}`],
+    ['Avg protein/day', `${plan.macro_summary.estimated_avg_daily_protein_g}g`],
+    ['Recipes in rotation', `${meals.length}`],
+    ['Unique ingredients used', `${uniqueIngredients.size}`],
+  ];
+  summaryRows.forEach(([label, value]) => {
+    const card = document.createElement('div');
+    card.className = 'overview-card';
+    card.innerHTML = `<span class="overview-label">${label}</span><span class="overview-value">${value}</span>`;
+    weekOverview.appendChild(card);
+  });
+}
+
 function renderSchedule(plan) {
   const schedule = document.getElementById('schedule');
   schedule.innerHTML = '';
@@ -755,6 +776,24 @@ function renderSchedule(plan) {
       <div class="schedule-slot"><span class="slot-label">Dinner</span><span>${day.dinner}</span></div>
     `;
     schedule.appendChild(article);
+  });
+}
+
+function renderSummaryChips(plan, validation) {
+  const wrap = document.getElementById('summary-chips');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  const chips = [
+    validation.errors.length ? `${validation.errors.length} errors` : 'Ready to use',
+    validation.warnings.length ? `${validation.warnings.length} warnings` : 'No warnings',
+    `${plan.prep_steps.length} prep steps`,
+    `${Object.keys(plan.shopping_list || {}).length} shopping sections`,
+  ];
+  chips.forEach((label) => {
+    const chip = document.createElement('span');
+    chip.className = 'summary-chip';
+    chip.textContent = label;
+    wrap.appendChild(chip);
   });
 }
 
@@ -782,7 +821,9 @@ function renderResult(intake, plan, validation) {
     warningsEl.appendChild(li);
   });
 
+  renderSummaryChips(plan, validation);
   renderMealCards(plan);
+  renderWeekOverview(plan);
   renderSchedule(plan);
 
   const prep = document.getElementById('prep-steps');
