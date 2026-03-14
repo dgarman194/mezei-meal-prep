@@ -180,6 +180,55 @@ function addRow(sectionName) {
   container.appendChild(makeRow(sectionName));
 }
 
+function cleanBulkLine(line) {
+  return String(line || '')
+    .replace(/^\s*(?:[-*•]+|\d+[.)])\s*/, '')
+    .replace(/^\s*\[[ xX]?\]\s*/, '')
+    .trim();
+}
+
+function parseBulkItems(rawText) {
+  return String(rawText || '')
+    .split(/\n|,/)
+    .map(cleanBulkLine)
+    .map((line) => line.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+}
+
+function uniqueItems(items) {
+  const seen = new Set();
+  return items.filter((item) => {
+    const key = normalize(item);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function importBulkSection(sectionName) {
+  const textarea = document.getElementById(`${sectionName}-bulk-input`);
+  const replaceToggle = document.getElementById(`${sectionName}-bulk-replace`);
+  const container = document.getElementById(`${sectionName}-rows`);
+  if (!textarea || !container) return;
+
+  const parsed = uniqueItems(parseBulkItems(textarea.value));
+  if (!parsed.length) return;
+
+  const existing = replaceToggle?.checked ? [] : buildInventorySection(sectionName).map((row) => row.item);
+  const merged = uniqueItems([...existing, ...parsed]);
+  container.innerHTML = '';
+  merged.forEach((item) => container.appendChild(makeRow(sectionName, { item, qty: '', expires_in_days: null })));
+  if (!merged.length) container.appendChild(makeRow(sectionName));
+
+  textarea.value = '';
+  if (replaceToggle) replaceToggle.checked = false;
+  document.getElementById(`${sectionName}-bulk-wrap`)?.classList.add('hidden');
+}
+
+function toggleBulkSection(sectionName) {
+  document.getElementById(`${sectionName}-bulk-wrap`)?.classList.toggle('hidden');
+}
+
 function buildInventorySection(prefix) {
   const items = Array.from(document.querySelectorAll(`[name="${prefix}_item"]`));
   const qtys = Array.from(document.querySelectorAll(`[name="${prefix}_qty"]`));
@@ -590,6 +639,12 @@ function seedForm(intake) {
   seedForm(DEFAULT_INTAKE);
   document.querySelectorAll('[data-add-row]').forEach((btn) => {
     btn.addEventListener('click', () => addRow(btn.dataset.addRow));
+  });
+  document.querySelectorAll('[data-bulk-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => toggleBulkSection(btn.dataset.bulkToggle));
+  });
+  document.querySelectorAll('[data-bulk-apply]').forEach((btn) => {
+    btn.addEventListener('click', () => importBulkSection(btn.dataset.bulkApply));
   });
   document.getElementById('planner-form').addEventListener('submit', (event) => {
     event.preventDefault();

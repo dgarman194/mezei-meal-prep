@@ -88,6 +88,37 @@ textarea {
   margin-top: 14px;
 }
 
+.inventory-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.bulk-import {
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  background: #fafbff;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.bulk-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-row.compact {
+  margin: 0;
+  font-weight: 500;
+}
+
+.hidden {
+  display: none !important;
+}
+
 .rows {
   display: grid;
   gap: 8px;
@@ -119,6 +150,11 @@ button.secondary {
   background: #eef2ff;
   color: #1d4ed8;
   border-color: #c7d2fe;
+}
+button.small {
+  width: auto;
+  padding: 8px 10px;
+  font-size: 0.92rem;
 }
 button.ghost {
   background: #fff;

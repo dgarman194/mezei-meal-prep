@@ -49,19 +49,64 @@
         </div>
 
         <div class="inventory-section">
-          <h3>Fridge</h3>
+          <div class="inventory-header">
+            <h3>Fridge</h3>
+            <button type="button" class="secondary small" data-bulk-toggle="fridge">Paste list</button>
+          </div>
+          <div class="bulk-import hidden" id="fridge-bulk-wrap">
+            <label>Paste fridge list from chat/notes
+              <textarea id="fridge-bulk-input" rows="5" placeholder="eggs&#10;greek yogurt&#10;- spinach&#10;1. tortillas&#10;feta (half tub)"></textarea>
+            </label>
+            <div class="bulk-actions">
+              <label class="checkbox-row compact">
+                <input type="checkbox" id="fridge-bulk-replace" />
+                Replace current fridge items
+              </label>
+              <button type="button" class="secondary small" data-bulk-apply="fridge">Import fridge list</button>
+            </div>
+          </div>
           <div id="fridge-rows" class="rows"></div>
           <button type="button" class="secondary" data-add-row="fridge">+ Add fridge item</button>
         </div>
 
         <div class="inventory-section">
-          <h3>Pantry</h3>
+          <div class="inventory-header">
+            <h3>Pantry</h3>
+            <button type="button" class="secondary small" data-bulk-toggle="pantry">Paste list</button>
+          </div>
+          <div class="bulk-import hidden" id="pantry-bulk-wrap">
+            <label>Paste pantry list from chat/notes
+              <textarea id="pantry-bulk-input" rows="5" placeholder="brown rice&#10;canned chickpeas&#10;- oats&#10;olive oil"></textarea>
+            </label>
+            <div class="bulk-actions">
+              <label class="checkbox-row compact">
+                <input type="checkbox" id="pantry-bulk-replace" />
+                Replace current pantry items
+              </label>
+              <button type="button" class="secondary small" data-bulk-apply="pantry">Import pantry list</button>
+            </div>
+          </div>
           <div id="pantry-rows" class="rows"></div>
           <button type="button" class="secondary" data-add-row="pantry">+ Add pantry item</button>
         </div>
 
         <div class="inventory-section">
-          <h3>Freezer</h3>
+          <div class="inventory-header">
+            <h3>Freezer</h3>
+            <button type="button" class="secondary small" data-bulk-toggle="freezer">Paste list</button>
+          </div>
+          <div class="bulk-import hidden" id="freezer-bulk-wrap">
+            <label>Paste freezer list from chat/notes
+              <textarea id="freezer-bulk-input" rows="5" placeholder="frozen berries&#10;shrimp&#10;broccoli florets"></textarea>
+            </label>
+            <div class="bulk-actions">
+              <label class="checkbox-row compact">
+                <input type="checkbox" id="freezer-bulk-replace" />
+                Replace current freezer items
+              </label>
+              <button type="button" class="secondary small" data-bulk-apply="freezer">Import freezer list</button>
+            </div>
+          </div>
           <div id="freezer-rows" class="rows"></div>
           <button type="button" class="secondary" data-add-row="freezer">+ Add freezer item</button>
         </div>
