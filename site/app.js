@@ -209,10 +209,10 @@ function importBulkSection(sectionName) {
   const textarea = document.getElementById(`${sectionName}-bulk-input`);
   const replaceToggle = document.getElementById(`${sectionName}-bulk-replace`);
   const container = document.getElementById(`${sectionName}-rows`);
-  if (!textarea || !container) return;
+  if (!textarea || !container) return [];
 
   const parsed = uniqueItems(parseBulkItems(textarea.value));
-  if (!parsed.length) return;
+  if (!parsed.length) return [];
 
   const existing = replaceToggle?.checked ? [] : buildInventorySection(sectionName).map((row) => row.item);
   const merged = uniqueItems([...existing, ...parsed]);
@@ -223,6 +223,7 @@ function importBulkSection(sectionName) {
   textarea.value = '';
   if (replaceToggle) replaceToggle.checked = false;
   document.getElementById(`${sectionName}-bulk-wrap`)?.classList.add('hidden');
+  return merged;
 }
 
 function toggleBulkSection(sectionName) {
