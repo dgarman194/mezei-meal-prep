@@ -1,7 +1,0 @@
-PLAN_VALIDATION_REPORT
-file=weekly-plan.json
-errors=0
-warnings=1
-
-WARNINGS:
-- Calories off target by >250 kcal (1340.0 vs 1600).

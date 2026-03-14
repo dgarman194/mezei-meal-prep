@@ -1,4 +1,0 @@
-PLAN_VALIDATION_REPORT
-file=tmp/validation-example/weekly-plan.json
-errors=0
-warnings=0
