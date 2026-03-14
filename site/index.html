@@ -11,6 +11,12 @@
     <header class="hero">
       <h1>Mezei Meal Prep Planner</h1>
       <p>Mobile-first weekly planning: inventory in, practical tasty prep plan out.</p>
+      <div class="save-bar">
+        <span class="save-status" id="save-status">Draft not saved yet</span>
+        <div class="save-actions">
+          <button type="button" class="ghost small" id="restore-defaults">Reset form</button>
+        </div>
+      </div>
     </header>
 
     <section class="card">
@@ -121,15 +127,26 @@
       <ul id="validation-errors"></ul>
       <ul class="warn-list" id="validation-warnings"></ul>
       <div class="downloads" id="downloads"></div>
+      <p class="section-subtitle hidden" id="calendar-note">Download the calendar file and open it on iPhone/Mac to add the week into Apple Calendar.</p>
     </section>
 
     <section class="card hidden" id="result-meals">
-      <h2>Meal Lineup</h2>
-      <ul id="meal-lineup"></ul>
+      <div class="section-head">
+        <div>
+          <h2>Meal Lineup</h2>
+          <p class="section-subtitle">Each recipe shows what’s in it and how it fits the week.</p>
+        </div>
+      </div>
+      <div id="meal-lineup" class="meal-lineup"></div>
     </section>
 
     <section class="card hidden" id="result-schedule">
-      <h2>7-Day Schedule</h2>
+      <div class="section-head">
+        <div>
+          <h2>7-Day Schedule</h2>
+          <p class="section-subtitle">Every day includes breakfast, lunch, and dinner.</p>
+        </div>
+      </div>
       <div class="schedule" id="schedule"></div>
     </section>
 

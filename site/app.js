@@ -1,3 +1,5 @@
+const STORAGE_KEY = 'mezei-meal-prep-draft-v2';
+const PLAN_STORAGE_KEY = 'mezei-meal-prep-last-plan-v2';
 const DEFAULT_INTAKE = {
   week_of: new Date().toISOString().slice(0, 10),
   goals: {
@@ -17,13 +19,16 @@ const DEFAULT_INTAKE = {
     fridge: [
       { item: 'spinach', qty: '1 bag', expires_in_days: 3 },
       { item: 'greek yogurt', qty: '24 oz', expires_in_days: 6 },
+      { item: 'eggs', qty: '1 dozen', expires_in_days: 7 },
     ],
     pantry: [
       { item: 'lentils', qty: '2 cups dry', expires_in_days: null },
       { item: 'brown rice', qty: '4 cups dry', expires_in_days: null },
+      { item: 'oats', qty: '1 container', expires_in_days: null },
     ],
     freezer: [
       { item: 'shrimp', qty: '1 lb', expires_in_days: 30 },
+      { item: 'frozen berries', qty: '1 bag', expires_in_days: 30 },
     ],
   },
 };
@@ -32,27 +37,74 @@ const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 
 const MEAL_CATALOG = [
   {
+    name: 'Greek Yogurt Overnight Oats',
+    slot: 'breakfast',
+    type: 'vegetarian',
+    ingredients: ['greek yogurt', 'oats', 'chia seeds', 'berries'],
+    kcal: 340,
+    protein_g: 22,
+    prep: 'batch',
+    flavor_tags: ['sweet', 'creamy', 'fresh'],
+    taste_upgrade: 'Use cinnamon, vanilla, a tiny pinch of salt, and toasted nuts right before eating.',
+  },
+  {
+    name: 'Egg White Veggie Muffins + Fruit',
+    slot: 'breakfast',
+    type: 'vegetarian',
+    ingredients: ['egg whites', 'spinach', 'bell pepper', 'onion', 'fruit'],
+    kcal: 280,
+    protein_g: 23,
+    prep: 'batch',
+    flavor_tags: ['savory', 'light', 'quick'],
+    taste_upgrade: 'Sauté veggies first and add feta or chili flakes for more flavor.',
+  },
+  {
+    name: 'Cottage Cheese Power Snack Plate',
+    slot: 'breakfast',
+    type: 'vegetarian',
+    ingredients: ['cottage cheese', 'carrot', 'cucumber', 'hummus'],
+    kcal: 260,
+    protein_g: 21,
+    prep: 'quick',
+    flavor_tags: ['fresh', 'salty', 'crunchy'],
+    taste_upgrade: 'Season cottage cheese with za’atar and olive oil; add crunchy roasted chickpeas.',
+  },
+  {
     name: 'Lentil Spinach Curry Bowls',
+    slot: 'lunch',
     type: 'vegetarian',
     ingredients: ['lentils', 'spinach', 'onion', 'garlic', 'coconut milk', 'tomato'],
     kcal: 430,
     protein_g: 24,
     prep: 'batch',
     flavor_tags: ['curry', 'warm', 'savory'],
-    taste_upgrade: 'Bloom curry powder + cumin in oil, finish with lemon and cilantro.',
+    taste_upgrade: 'Bloom curry powder + cumin in oil, then finish with lemon and cilantro.',
   },
   {
     name: 'Chickpea Greek Salad Boxes',
+    slot: 'lunch',
     type: 'vegetarian',
     ingredients: ['chickpeas', 'cucumber', 'tomato', 'feta', 'olive oil', 'lemon'],
     kcal: 390,
     protein_g: 19,
     prep: 'batch',
     flavor_tags: ['mediterranean', 'bright', 'fresh'],
-    taste_upgrade: 'Salt cucumbers first, then toss with lemon zest + oregano vinaigrette.',
+    taste_upgrade: 'Salt cucumbers first, then toss with lemon zest and oregano vinaigrette.',
+  },
+  {
+    name: 'Black Bean Taco Bowls',
+    slot: 'lunch',
+    type: 'vegetarian',
+    ingredients: ['black beans', 'brown rice', 'corn', 'salsa', 'avocado', 'lime'],
+    kcal: 460,
+    protein_g: 20,
+    prep: 'batch',
+    flavor_tags: ['tex-mex', 'smoky', 'savory'],
+    taste_upgrade: 'Toast the spices, add chipotle-lime yogurt sauce, and finish with pickled onions.',
   },
   {
     name: 'Tofu Veggie Stir-Fry + Brown Rice',
+    slot: 'dinner',
     type: 'vegetarian',
     ingredients: ['tofu', 'broccoli', 'bell pepper', 'brown rice', 'soy sauce', 'garlic'],
     kcal: 470,
@@ -63,57 +115,32 @@ const MEAL_CATALOG = [
   },
   {
     name: 'Shrimp Zucchini Skillet with Quinoa',
+    slot: 'dinner',
     type: 'shrimp',
     ingredients: ['shrimp', 'zucchini', 'quinoa', 'garlic', 'lemon', 'olive oil'],
     kcal: 410,
     protein_g: 33,
     prep: 'quick',
     flavor_tags: ['lemon-herb', 'bright', 'quick'],
-    taste_upgrade: 'Marinate shrimp 10 min with lemon, paprika, garlic, then finish with parsley.',
+    taste_upgrade: 'Marinate shrimp for 10 minutes with lemon, paprika, and garlic, then finish with parsley.',
   },
   {
-    name: 'Greek Yogurt Overnight Oats',
+    name: 'Sheet Pan Veggie Feta Bake',
+    slot: 'dinner',
     type: 'vegetarian',
-    ingredients: ['greek yogurt', 'oats', 'chia seeds', 'berries'],
-    kcal: 340,
-    protein_g: 22,
+    ingredients: ['broccoli', 'bell pepper', 'onion', 'feta', 'olive oil', 'rice'],
+    kcal: 420,
+    protein_g: 18,
     prep: 'batch',
-    flavor_tags: ['sweet', 'creamy', 'fresh'],
-    taste_upgrade: 'Use pinch of salt + cinnamon + vanilla; add toasted nuts at serving time.',
-  },
-  {
-    name: 'Egg White Veggie Muffins + Fruit',
-    type: 'vegetarian',
-    ingredients: ['egg whites', 'spinach', 'bell pepper', 'onion'],
-    kcal: 280,
-    protein_g: 23,
-    prep: 'batch',
-    flavor_tags: ['savory', 'light', 'quick'],
-    taste_upgrade: 'Sauté veggies first and add feta/chili flakes for stronger flavor.',
-  },
-  {
-    name: 'Black Bean Taco Bowls',
-    type: 'vegetarian',
-    ingredients: ['black beans', 'brown rice', 'corn', 'salsa', 'avocado', 'lime'],
-    kcal: 460,
-    protein_g: 20,
-    prep: 'batch',
-    flavor_tags: ['tex-mex', 'smoky', 'savory'],
-    taste_upgrade: 'Toast spices, add chipotle-lime yogurt sauce, finish with pickled onions.',
-  },
-  {
-    name: 'Cottage Cheese Power Snack Plate',
-    type: 'vegetarian',
-    ingredients: ['cottage cheese', 'carrot', 'cucumber', 'hummus'],
-    kcal: 260,
-    protein_g: 21,
-    prep: 'quick',
-    flavor_tags: ['fresh', 'salty', 'crunchy'],
-    taste_upgrade: 'Season cottage cheese with za\'atar + olive oil; add crunchy roasted chickpeas.',
+    flavor_tags: ['roasty', 'savory', 'comfort'],
+    taste_upgrade: 'Roast hot so the edges char a little; finish with lemon and chili flakes.',
   },
 ];
 
 const FORBIDDEN = ['chicken', 'beef', 'pork', 'bacon', 'turkey', 'ham', 'sausage', 'salmon', 'tuna', 'cod'];
+let saveTimer = null;
+let hasHydrated = false;
+let lastSavedAt = null;
 
 function normalize(text) {
   return String(text || '').trim().toLowerCase();
@@ -121,13 +148,79 @@ function normalize(text) {
 
 function parseListText(value) {
   if (!value) return [];
-  return String(value).replace(/\n/g, ',').split(',').map(s => s.trim()).filter(Boolean);
+  return String(value).replace(/\n/g, ',').split(',').map((s) => s.trim()).filter(Boolean);
 }
 
 function parseIntSafe(value, fallback = null) {
   if (value === null || value === undefined || value === '') return fallback;
   const n = Number.parseInt(value, 10);
   return Number.isNaN(n) ? fallback : n;
+}
+
+function slugify(text) {
+  return String(text || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'meal';
+}
+
+function formatSlot(slot) {
+  return slot.charAt(0).toUpperCase() + slot.slice(1);
+}
+
+function getSaveStatusEl() {
+  return document.getElementById('save-status');
+}
+
+function setSaveStatus(message, tone = 'muted') {
+  const el = getSaveStatusEl();
+  if (!el) return;
+  el.textContent = message;
+  el.dataset.tone = tone;
+}
+
+function noteDirty() {
+  if (!hasHydrated) return;
+  setSaveStatus('Unsaved changes…', 'warn');
+}
+
+function loadDraft() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed?.intake || null;
+  } catch {
+    return null;
+  }
+}
+
+function saveDraftNow() {
+  try {
+    const intake = buildIntakeFromForm();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ savedAt: Date.now(), intake }));
+    lastSavedAt = Date.now();
+    setSaveStatus('Saved to this device', 'good');
+    return intake;
+  } catch {
+    setSaveStatus('Could not save draft on this device', 'bad');
+    return null;
+  }
+}
+
+function queueDraftSave() {
+  noteDirty();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    saveDraftNow();
+  }, 250);
+}
+
+function clearDraft() {
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(PLAN_STORAGE_KEY);
+  lastSavedAt = null;
+  setSaveStatus('Draft cleared', 'muted');
 }
 
 function makeRow(section, row = {}) {
@@ -156,7 +249,15 @@ function makeRow(section, row = {}) {
   remove.type = 'button';
   remove.className = 'ghost';
   remove.textContent = '✕';
-  remove.addEventListener('click', () => wrapper.remove());
+  remove.addEventListener('click', () => {
+    wrapper.remove();
+    queueDraftSave();
+  });
+
+  [item, qty, expires].forEach((input) => {
+    input.addEventListener('input', queueDraftSave);
+    input.addEventListener('change', queueDraftSave);
+  });
 
   wrapper.append(item, qty, expires, remove);
   return wrapper;
@@ -178,6 +279,7 @@ function addRow(sectionName) {
   const container = document.getElementById(`${sectionName}-rows`);
   if (!container) return;
   container.appendChild(makeRow(sectionName));
+  queueDraftSave();
 }
 
 function cleanBulkLine(line) {
@@ -189,7 +291,7 @@ function cleanBulkLine(line) {
 
 function parseBulkItems(rawText) {
   return String(rawText || '')
-    .split(/\n|,/)
+    .split(/\n|,/) 
     .map(cleanBulkLine)
     .map((line) => line.replace(/\s+/g, ' ').trim())
     .filter(Boolean);
@@ -223,6 +325,7 @@ function importBulkSection(sectionName) {
   textarea.value = '';
   if (replaceToggle) replaceToggle.checked = false;
   document.getElementById(`${sectionName}-bulk-wrap`)?.classList.add('hidden');
+  queueDraftSave();
   return merged;
 }
 
@@ -306,79 +409,91 @@ function mealScore(meal, invIdx, perishIdx, dislikes, likes, shrimpOk) {
     }
   });
   let likeBonus = 0;
-  const mealText = normalize([meal.name, ...meal.ingredients, ...(meal.flavor_tags || [])].join(' '));
+  const mealText = normalize([meal.name, meal.slot, ...meal.ingredients, ...(meal.flavor_tags || [])].join(' '));
   likes.forEach((liked) => {
     const l = normalize(liked);
     if (l && mealText.includes(l)) likeBonus += 2;
   });
   const base = matched * 3 + perishBonus * 2 - missing;
   const proteinBonus = Math.floor((meal.protein_g || 0) / 8);
-  return base + proteinBonus + likeBonus;
+  const slotBonus = meal.slot === 'breakfast' ? 1 : 0;
+  return base + proteinBonus + likeBonus + slotBonus;
 }
 
-function chooseMeals(intake, invIdx, perishIdx) {
+function chooseMealsForSlot(intake, invIdx, perishIdx, slot, desiredCount = 3) {
   const prefs = intake.preferences || {};
   const shrimpOk = !!prefs.shrimp_ok;
   const dislikes = prefs.dislikes || [];
   const likes = prefs.likes || [];
   const scored = [];
-  MEAL_CATALOG.forEach((meal) => {
+  MEAL_CATALOG.filter((meal) => meal.slot === slot).forEach((meal) => {
     const score = mealScore(meal, invIdx, perishIdx, dislikes, likes, shrimpOk);
     if (score > -500) scored.push({ score, meal });
   });
   scored.sort((a, b) => (b.score - a.score) || ((b.meal.protein_g || 0) - (a.meal.protein_g || 0)));
   const selected = [];
-  let shrimpCount = 0;
+  const names = new Set();
   scored.forEach(({ meal }) => {
-    if (selected.length >= 5) return;
-    if (meal.type === 'shrimp') {
-      if (!shrimpOk || shrimpCount >= 2) return;
-      shrimpCount += 1;
-    }
+    if (selected.length >= desiredCount) return;
+    if (meal.type === 'shrimp' && !shrimpOk) return;
+    if (names.has(meal.name)) return;
     selected.push(meal);
+    names.add(meal.name);
   });
-  if (selected.length < 4) {
-    const names = new Set(selected.map((m) => m.name));
-    MEAL_CATALOG.filter((m) => m.type === 'vegetarian')
-      .sort((a, b) => (b.protein_g || 0) - (a.protein_g || 0))
-      .forEach((meal) => {
-        if (selected.length >= 4) return;
-        if (!names.has(meal.name)) {
-          selected.push(meal);
-          names.add(meal.name);
-        }
-      });
-  }
   return selected;
 }
 
+function chooseMeals(intake, invIdx, perishIdx) {
+  const breakfasts = chooseMealsForSlot(intake, invIdx, perishIdx, 'breakfast', 3);
+  const lunches = chooseMealsForSlot(intake, invIdx, perishIdx, 'lunch', 3);
+  const dinners = chooseMealsForSlot(intake, invIdx, perishIdx, 'dinner', 3);
+  return {
+    breakfast: breakfasts,
+    lunch: lunches,
+    dinner: dinners,
+    all: [...breakfasts, ...lunches, ...dinners],
+  };
+}
+
+function rotateChoice(list, index) {
+  if (!list.length) return null;
+  return list[index % list.length];
+}
+
 function buildSchedule(selectedMeals) {
-  if (!selectedMeals.length) return [];
-  const shrimpMealNames = new Set(selectedMeals.filter((m) => m.type === 'shrimp').map((m) => m.name));
-  const nonShrimpMeals = selectedMeals.filter((m) => m.type !== 'shrimp');
+  const breakfastMeals = selectedMeals.breakfast || [];
+  const lunchMeals = selectedMeals.lunch || [];
+  const dinnerMeals = selectedMeals.dinner || [];
   let shrimpSlots = 0;
   return DAYS.map((day, i) => {
-    let lunch = selectedMeals[i % selectedMeals.length];
-    let dinner = selectedMeals[(i + 2) % selectedMeals.length];
-    if (shrimpMealNames.has(lunch.name) && shrimpSlots >= 3 && nonShrimpMeals.length) lunch = nonShrimpMeals[i % nonShrimpMeals.length];
-    if (shrimpMealNames.has(lunch.name)) shrimpSlots += 1;
-    if (shrimpMealNames.has(dinner.name) && shrimpSlots >= 3 && nonShrimpMeals.length) dinner = nonShrimpMeals[(i + 2) % nonShrimpMeals.length];
-    if (shrimpMealNames.has(dinner.name)) shrimpSlots += 1;
-    return { day, lunch: lunch.name, dinner: dinner.name };
+    const breakfast = rotateChoice(breakfastMeals, i);
+    const lunch = rotateChoice(lunchMeals, i + 1);
+    let dinner = rotateChoice(dinnerMeals, i + 2);
+    if (dinner?.type === 'shrimp' && shrimpSlots >= 2) {
+      const fallback = dinnerMeals.find((meal) => meal.type !== 'shrimp');
+      if (fallback) dinner = fallback;
+    }
+    if (dinner?.type === 'shrimp') shrimpSlots += 1;
+    return {
+      day,
+      breakfast: breakfast?.name || 'Breakfast TBD',
+      lunch: lunch?.name || 'Lunch TBD',
+      dinner: dinner?.name || 'Dinner TBD',
+    };
   });
 }
 
-function buildShoppingList(selectedMeals, invIdx) {
+function buildShoppingList(allMeals, invIdx) {
   const missing = {};
   const categoryGuess = {
     spinach: 'Produce', onion: 'Produce', garlic: 'Produce', tomato: 'Produce', cucumber: 'Produce',
     broccoli: 'Produce', 'bell pepper': 'Produce', zucchini: 'Produce', lemon: 'Produce', berries: 'Produce',
-    corn: 'Produce', avocado: 'Produce', lime: 'Produce', cilantro: 'Produce', parsley: 'Produce',
+    corn: 'Produce', avocado: 'Produce', lime: 'Produce', cilantro: 'Produce', parsley: 'Produce', fruit: 'Produce',
     tofu: 'Protein', 'egg whites': 'Protein', shrimp: 'Protein', feta: 'Protein', 'cottage cheese': 'Protein', 'greek yogurt': 'Protein',
-    lentils: 'Pantry', chickpeas: 'Pantry', 'brown rice': 'Pantry', quinoa: 'Pantry', 'black beans': 'Pantry',
+    lentils: 'Pantry', chickpeas: 'Pantry', 'brown rice': 'Pantry', quinoa: 'Pantry', 'black beans': 'Pantry', rice: 'Pantry',
     oats: 'Pantry', 'chia seeds': 'Pantry', 'soy sauce': 'Pantry', 'olive oil': 'Pantry', 'coconut milk': 'Pantry', salsa: 'Pantry', hummus: 'Pantry'
   };
-  selectedMeals.forEach((meal) => {
+  allMeals.forEach((meal) => {
     meal.ingredients.forEach((ing) => {
       const key = normalize(ing);
       if (!Object.prototype.hasOwnProperty.call(invIdx, key)) {
@@ -391,36 +506,36 @@ function buildShoppingList(selectedMeals, invIdx) {
   return Object.fromEntries(Object.entries(missing).map(([k, v]) => [k, Array.from(v).sort()]));
 }
 
-function buildPrepSteps(selectedMeals) {
-  const batchMeals = selectedMeals.filter((m) => m.prep === 'batch');
-  const quickMeals = selectedMeals.filter((m) => m.prep !== 'batch');
+function buildPrepSteps(allMeals) {
+  const batchMeals = allMeals.filter((m) => m.prep === 'batch');
+  const quickMeals = allMeals.filter((m) => m.prep !== 'batch');
   const steps = [
-    'Cook grains and legumes first so the longest items run in the background.',
-    'Chop and roast or sauté vegetables in one batch to save time and dishes.',
-    'Mix two sauces for the week so meals taste fresh when reheated.',
-    'Cook main proteins and portion them into containers while bases cool.',
+    'Cook grains, oats, and legumes first so the longest items run in the background.',
+    'Prep breakfast pieces early so mornings stay brainless and fast.',
+    'Batch-chop and roast or sauté vegetables in one pass to reduce cleanup.',
+    'Mix two sauces or flavor boosters so reheated meals still feel good midweek.',
   ];
   if (batchMeals.length) {
-    steps.push(`Prioritize batch meals first: ${batchMeals.map((m) => m.name).join(', ')}.`);
+    steps.push(`Batch-first meals this week: ${batchMeals.map((m) => m.name).join(', ')}.`);
   }
   if (quickMeals.length) {
-    steps.push(`Save quick fresh-cook meals for later in the week: ${quickMeals.map((m) => m.name).join(', ')}.`);
+    steps.push(`Save fresher quick meals for later in the week: ${quickMeals.map((m) => m.name).join(', ')}.`);
   }
   return steps;
 }
 
-function buildFlavorPlaybook(selectedMeals) {
+function buildFlavorPlaybook(allMeals) {
   return {
     weekly_sauce_rotation: [
       { name: 'Lemon-Herb Yogurt', formula: 'Greek yogurt + lemon juice + zest + garlic + salt + dill/parsley' },
       { name: 'Chipotle-Lime', formula: 'Greek yogurt (or light mayo) + chipotle + lime juice + cumin + tiny honey pinch' },
     ],
-    meal_upgrades: selectedMeals.map((meal) => ({ meal: meal.name, taste_upgrade: meal.taste_upgrade })),
+    meal_upgrades: allMeals.map((meal) => ({ meal: meal.name, taste_upgrade: meal.taste_upgrade })),
   };
 }
 
-function buildMacroSummary(selectedMeals, intake) {
-  if (!selectedMeals.length) {
+function buildMacroSummary(schedule, mealLookup, intake) {
+  if (!schedule.length) {
     return {
       target_calories: intake.goals.daily_calorie_target,
       target_protein_g: intake.goals.daily_protein_target_g,
@@ -430,8 +545,18 @@ function buildMacroSummary(selectedMeals, intake) {
       protein_delta_g: -intake.goals.daily_protein_target_g,
     };
   }
-  const avgCalories = Math.round(selectedMeals.reduce((sum, meal) => sum + meal.kcal, 0) / selectedMeals.length);
-  const avgProtein = Math.round(selectedMeals.reduce((sum, meal) => sum + meal.protein_g, 0) / selectedMeals.length);
+  let totalCalories = 0;
+  let totalProtein = 0;
+  schedule.forEach((day) => {
+    ['breakfast', 'lunch', 'dinner'].forEach((slot) => {
+      const meal = mealLookup[day[slot]];
+      if (!meal) return;
+      totalCalories += meal.kcal || 0;
+      totalProtein += meal.protein_g || 0;
+    });
+  });
+  const avgCalories = Math.round(totalCalories / schedule.length);
+  const avgProtein = Math.round(totalProtein / schedule.length);
   return {
     target_calories: intake.goals.daily_calorie_target,
     target_protein_g: intake.goals.daily_protein_target_g,
@@ -445,67 +570,191 @@ function buildMacroSummary(selectedMeals, intake) {
 function validatePlan(plan) {
   const errors = [];
   const warnings = [];
-  const meals = plan.selected_meals || [];
-  if (meals.length < 4) errors.push('Need at least 4 selected meals.');
-  if (new Set(meals.map((m) => m.name)).size < 4) errors.push('Meal variety too low (<4 unique meal names).');
-  const shrimpNames = new Set(meals.filter((m) => m.type === 'shrimp').map((m) => m.name));
+  const allMeals = plan.selected_meals?.all || [];
+  if (allMeals.length < 6) errors.push('Need enough meal variety across breakfast, lunch, and dinner.');
   const schedule = plan.schedule || [];
   if (schedule.length !== 7) errors.push('Schedule must include 7 days.');
-  let shrimpSlots = 0;
   schedule.forEach((row) => {
-    if (shrimpNames.has(row.lunch)) shrimpSlots += 1;
-    if (shrimpNames.has(row.dinner)) shrimpSlots += 1;
+    if (!row.breakfast || !row.lunch || !row.dinner) {
+      errors.push(`${row.day} is missing breakfast, lunch, or dinner.`);
+    }
   });
-  if (shrimpSlots > 3) warnings.push(`Shrimp slots high (${shrimpSlots}>3).`);
-  const textBlob = JSON.stringify(meals).toLowerCase();
+  const textBlob = JSON.stringify(allMeals).toLowerCase();
   FORBIDDEN.forEach((word) => {
     if (textBlob.includes(word)) errors.push(`Forbidden meat/fish term found: ${word}`);
   });
   if (!plan.prep_steps || plan.prep_steps.length < 4) errors.push('prep_steps missing or too short (<4).');
   const flavor = plan.flavor_playbook || {};
   if (!flavor.meal_upgrades) warnings.push('Flavor playbook missing (meals may feel bland/repetitive).');
-  else if (flavor.meal_upgrades.length < meals.length) warnings.push('Not all meals include taste upgrades.');
+  else if (flavor.meal_upgrades.length < allMeals.length) warnings.push('Not all meals include taste upgrades.');
   const macro = plan.macro_summary || {};
   if (!Object.keys(macro).length) errors.push('macro_summary missing.');
   else {
-    if (Math.abs((macro.estimated_avg_daily_calories || 0) - (macro.target_calories || 0)) > 250) {
-      warnings.push(`Calories off target by >250 kcal (${macro.estimated_avg_daily_calories} vs ${macro.target_calories}).`);
+    if (Math.abs((macro.estimated_avg_daily_calories || 0) - (macro.target_calories || 0)) > 350) {
+      warnings.push(`Calories off target by >350 kcal (${macro.estimated_avg_daily_calories} vs ${macro.target_calories}).`);
     }
-    if ((macro.estimated_avg_daily_protein_g || 0) < (macro.target_protein_g || 0) - 20) {
-      warnings.push(`Protein below target by >20g (${macro.estimated_avg_daily_protein_g} vs ${macro.target_protein_g}).`);
+    if ((macro.estimated_avg_daily_protein_g || 0) < (macro.target_protein_g || 0) - 25) {
+      warnings.push(`Protein below target by >25g (${macro.estimated_avg_daily_protein_g} vs ${macro.target_protein_g}).`);
     }
   }
   return { errors, warnings };
 }
 
+function buildMealLookup(allMeals) {
+  return Object.fromEntries(allMeals.map((meal) => [meal.name, meal]));
+}
+
 function generateWeeklyPlan(intake) {
   const { idx, perishable } = buildInventoryIndex(intake);
   const selectedMeals = chooseMeals(intake, idx, perishable);
+  const mealLookup = buildMealLookup(selectedMeals.all);
+  const schedule = buildSchedule(selectedMeals);
   return {
     selected_meals: selectedMeals,
-    schedule: buildSchedule(selectedMeals),
-    prep_steps: buildPrepSteps(selectedMeals),
-    shopping_list: buildShoppingList(selectedMeals, idx),
-    flavor_playbook: buildFlavorPlaybook(selectedMeals),
-    macro_summary: buildMacroSummary(selectedMeals, intake),
+    schedule,
+    prep_steps: buildPrepSteps(selectedMeals.all),
+    shopping_list: buildShoppingList(selectedMeals.all, idx),
+    flavor_playbook: buildFlavorPlaybook(selectedMeals.all),
+    macro_summary: buildMacroSummary(schedule, mealLookup, intake),
   };
+}
+
+function formatPlanMarkdown(intake, plan) {
+  const mealLookup = buildMealLookup(plan.selected_meals.all || []);
+  const lines = [];
+  lines.push(`# Mezei Weekly Meal Plan`);
+  lines.push(``);
+  lines.push(`Week of: ${intake.week_of}`);
+  lines.push(`Target: ${plan.macro_summary.target_calories} kcal / ${plan.macro_summary.target_protein_g}g protein`);
+  lines.push(`Estimated: ${plan.macro_summary.estimated_avg_daily_calories} kcal / ${plan.macro_summary.estimated_avg_daily_protein_g}g protein`);
+  lines.push(``);
+  lines.push(`## 7-Day Schedule`);
+  plan.schedule.forEach((day) => {
+    lines.push(`### ${day.day}`);
+    ['breakfast', 'lunch', 'dinner'].forEach((slot) => {
+      const meal = mealLookup[day[slot]];
+      const ingredients = meal?.ingredients?.join(', ') || 'details unavailable';
+      lines.push(`- ${formatSlot(slot)}: ${day[slot]} (${ingredients})`);
+    });
+    lines.push('');
+  });
+  lines.push(`## Meal Lineup`);
+  (plan.selected_meals.all || []).forEach((meal) => {
+    lines.push(`- **${meal.name}** [${formatSlot(meal.slot)}] — ${meal.kcal} kcal / ${meal.protein_g}g protein`);
+    lines.push(`  - Ingredients: ${meal.ingredients.join(', ')}`);
+    lines.push(`  - Upgrade: ${meal.taste_upgrade}`);
+  });
+  lines.push('');
+  lines.push('## Prep Steps');
+  plan.prep_steps.forEach((step, index) => lines.push(`${index + 1}. ${step}`));
+  return lines.join('\n');
+}
+
+function escapeIcsText(value) {
+  return String(value || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\n/g, '\\n');
+}
+
+function formatDateForIcs(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}${month}${day}`;
+}
+
+function startOfWeekFromDate(dateString) {
+  const base = new Date(`${dateString}T12:00:00`);
+  const day = base.getDay();
+  const diffToMonday = (day + 6) % 7;
+  base.setDate(base.getDate() - diffToMonday);
+  return base;
+}
+
+function buildCalendarFile(intake, plan) {
+  const mealLookup = buildMealLookup(plan.selected_meals.all || []);
+  const start = startOfWeekFromDate(intake.week_of);
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Atlas//Mezei Meal Prep Planner//EN', 'CALSCALE:GREGORIAN'];
+  plan.schedule.forEach((day, index) => {
+    const eventDate = new Date(start);
+    eventDate.setDate(start.getDate() + index);
+    ['breakfast', 'lunch', 'dinner'].forEach((slot) => {
+      const mealName = day[slot];
+      const meal = mealLookup[mealName];
+      const description = meal ? `Ingredients: ${meal.ingredients.join(', ')}\\nUpgrade: ${meal.taste_upgrade}` : '';
+      lines.push('BEGIN:VEVENT');
+      lines.push(`UID:${slugify(day.day)}-${slugify(slot)}-${formatDateForIcs(eventDate)}@mezei-meal-prep`);
+      lines.push(`DTSTAMP:${formatDateForIcs(new Date())}T120000Z`);
+      lines.push(`DTSTART;VALUE=DATE:${formatDateForIcs(eventDate)}`);
+      lines.push(`DTEND;VALUE=DATE:${formatDateForIcs(eventDate)}`);
+      lines.push(`SUMMARY:${escapeIcsText(`${formatSlot(slot)}: ${mealName}`)}`);
+      lines.push(`DESCRIPTION:${escapeIcsText(description)}`);
+      lines.push('END:VEVENT');
+    });
+  });
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
 }
 
 function renderDownloads(run) {
   const downloads = document.getElementById('downloads');
   downloads.innerHTML = '';
   const files = [
-    ['weekly-plan.md', 'Download weekly-plan.md'],
-    ['weekly-plan.json', 'Download weekly-plan.json'],
-    ['validation.txt', 'Download validation.txt'],
+    ['weekly-plan.md', 'Download weekly-plan.md', 'text/markdown;charset=utf-8'],
+    ['weekly-plan.json', 'Download weekly-plan.json', 'application/json;charset=utf-8'],
+    ['validation.txt', 'Download validation.txt', 'text/plain;charset=utf-8'],
+    ['weekly-plan.ics', 'Download Apple Calendar file (.ics)', 'text/calendar;charset=utf-8'],
   ];
-  files.forEach(([name, label]) => {
-    const blob = new Blob([run[name]], { type: 'text/plain;charset=utf-8' });
+  files.forEach(([name, label, type]) => {
+    const blob = new Blob([run[name]], { type });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = name;
     link.textContent = label;
     downloads.appendChild(link);
+  });
+  document.getElementById('calendar-note')?.classList.remove('hidden');
+}
+
+function renderMealCards(plan) {
+  const mealLineup = document.getElementById('meal-lineup');
+  mealLineup.innerHTML = '';
+  (plan.selected_meals.all || []).forEach((meal) => {
+    const card = document.createElement('article');
+    card.className = 'meal-card';
+    const ingredients = meal.ingredients.map((ingredient) => `<li>${ingredient}</li>`).join('');
+    card.innerHTML = `
+      <div class="meal-card-head">
+        <div>
+          <h3>${meal.name}</h3>
+          <p class="pill-row"><span class="pill">${formatSlot(meal.slot)}</span><span class="pill muted">${meal.kcal} kcal</span><span class="pill muted">${meal.protein_g}g protein</span></p>
+        </div>
+      </div>
+      <div class="meal-card-body">
+        <p><strong>What’s in it:</strong></p>
+        <ul>${ingredients}</ul>
+        <p><strong>Flavor move:</strong> ${meal.taste_upgrade}</p>
+      </div>
+    `;
+    mealLineup.appendChild(card);
+  });
+}
+
+function renderSchedule(plan) {
+  const schedule = document.getElementById('schedule');
+  schedule.innerHTML = '';
+  plan.schedule.forEach((day) => {
+    const article = document.createElement('article');
+    article.className = 'schedule-card';
+    article.innerHTML = `
+      <h3>${day.day}</h3>
+      <div class="schedule-slot"><span class="slot-label">Breakfast</span><span>${day.breakfast}</span></div>
+      <div class="schedule-slot"><span class="slot-label">Lunch</span><span>${day.lunch}</span></div>
+      <div class="schedule-slot"><span class="slot-label">Dinner</span><span>${day.dinner}</span></div>
+    `;
+    schedule.appendChild(article);
   });
 }
 
@@ -533,21 +782,8 @@ function renderResult(intake, plan, validation) {
     warningsEl.appendChild(li);
   });
 
-  const mealLineup = document.getElementById('meal-lineup');
-  mealLineup.innerHTML = '';
-  plan.selected_meals.forEach((meal) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<strong>${meal.name}</strong> — ${meal.kcal} kcal / ${meal.protein_g}g protein`;
-    mealLineup.appendChild(li);
-  });
-
-  const schedule = document.getElementById('schedule');
-  schedule.innerHTML = '';
-  plan.schedule.forEach((day) => {
-    const article = document.createElement('article');
-    article.innerHTML = `<h4>${day.day}</h4><p><strong>Lunch:</strong> ${day.lunch}</p><p><strong>Dinner:</strong> ${day.dinner}</p>`;
-    schedule.appendChild(article);
-  });
+  renderMealCards(plan);
+  renderSchedule(plan);
 
   const prep = document.getElementById('prep-steps');
   prep.innerHTML = '';
@@ -615,11 +851,14 @@ function renderResult(intake, plan, validation) {
     ...validation.warnings.map((w) => `- ${w}`),
   ].filter(Boolean).join('\n') + '\n';
 
-  renderDownloads({
-    'weekly-plan.md': JSON.stringify({ intake, plan }, null, 2),
-    'weekly-plan.json': JSON.stringify(plan, null, 2),
+  const downloadPayload = {
+    'weekly-plan.md': formatPlanMarkdown(intake, plan),
+    'weekly-plan.json': JSON.stringify({ intake, plan }, null, 2),
     'validation.txt': validationText,
-  });
+    'weekly-plan.ics': buildCalendarFile(intake, plan),
+  };
+  localStorage.setItem(PLAN_STORAGE_KEY, JSON.stringify(downloadPayload));
+  renderDownloads(downloadPayload);
 }
 
 function seedForm(intake) {
@@ -636,8 +875,21 @@ function seedForm(intake) {
   seedSection('freezer', intake.inventory.freezer);
 }
 
+function attachAutosaveListeners() {
+  const form = document.getElementById('planner-form');
+  form.querySelectorAll('input, textarea').forEach((input) => {
+    input.addEventListener('input', queueDraftSave);
+    input.addEventListener('change', queueDraftSave);
+  });
+}
+
 (function init() {
-  seedForm(DEFAULT_INTAKE);
+  const restored = loadDraft() || DEFAULT_INTAKE;
+  seedForm(restored);
+  attachAutosaveListeners();
+  hasHydrated = true;
+  setSaveStatus(loadDraft() ? 'Draft restored from this device' : 'Ready — draft will auto-save on this device', 'good');
+
   document.querySelectorAll('[data-add-row]').forEach((btn) => {
     btn.addEventListener('click', () => addRow(btn.dataset.addRow));
   });
@@ -647,9 +899,16 @@ function seedForm(intake) {
   document.querySelectorAll('[data-bulk-apply]').forEach((btn) => {
     btn.addEventListener('click', () => importBulkSection(btn.dataset.bulkApply));
   });
+
+  document.getElementById('restore-defaults').addEventListener('click', () => {
+    seedForm(DEFAULT_INTAKE);
+    clearDraft();
+    queueDraftSave();
+  });
+
   document.getElementById('planner-form').addEventListener('submit', (event) => {
     event.preventDefault();
-    const intake = buildIntakeFromForm();
+    const intake = saveDraftNow() || buildIntakeFromForm();
     const plan = generateWeeklyPlan(intake);
     const validation = validatePlan(plan);
     renderResult(intake, plan, validation);
