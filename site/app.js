@@ -410,17 +410,16 @@ function mealScore(meal, invIdx, perishIdx, dislikes, likes, shrimpOk, shoppingM
       missing += 1;
     }
   });
-  if (shoppingMode === 'inventory_only' && missing > 0) {
-    return -2000 - (missing * 25);
-  }
   let likeBonus = 0;
   const mealText = normalize([meal.name, meal.slot, ...meal.ingredients, ...(meal.flavor_tags || [])].join(' '));
   likes.forEach((liked) => {
     const l = normalize(liked);
     if (l && mealText.includes(l)) likeBonus += 2;
   });
-  const missingPenalty = shoppingMode === 'inventory_only' ? missing * 12 : missing;
-  const base = matched * 3 + perishBonus * 2 - missingPenalty;
+  const inventoryCoverage = meal.ingredients.length ? (matched / meal.ingredients.length) : 0;
+  const missingPenalty = shoppingMode === 'inventory_only' ? missing * 4 : missing;
+  const coverageBonus = shoppingMode === 'inventory_only' ? Math.round(inventoryCoverage * 12) : 0;
+  const base = matched * 3 + perishBonus * 2 + coverageBonus - missingPenalty;
   const proteinBonus = Math.floor((meal.protein_g || 0) / 8);
   const slotBonus = meal.slot === 'breakfast' ? 1 : 0;
   return base + proteinBonus + likeBonus + slotBonus;
@@ -435,9 +434,19 @@ function chooseMealsForSlot(intake, invIdx, perishIdx, slot, desiredCount = 3) {
   const scored = [];
   MEAL_CATALOG.filter((meal) => meal.slot === slot).forEach((meal) => {
     const score = mealScore(meal, invIdx, perishIdx, dislikes, likes, shrimpOk, shoppingMode);
-    if (score > -500) scored.push({ score, meal });
+    const matched = meal.ingredients.filter((ing) => Object.prototype.hasOwnProperty.call(invIdx, normalize(ing))).length;
+    const missing = meal.ingredients.length - matched;
+    scored.push({ score, matched, missing, meal });
   });
-  scored.sort((a, b) => (b.score - a.score) || ((b.meal.protein_g || 0) - (a.meal.protein_g || 0)));
+  scored.sort((a, b) => {
+    if (shoppingMode === 'inventory_only') {
+      return (b.matched - a.matched)
+        || (a.missing - b.missing)
+        || (b.score - a.score)
+        || ((b.meal.protein_g || 0) - (a.meal.protein_g || 0));
+    }
+    return (b.score - a.score) || ((b.meal.protein_g || 0) - (a.meal.protein_g || 0));
+  });
   const selected = [];
   const names = new Set();
   scored.forEach(({ meal }) => {
