@@ -123,6 +123,33 @@ textarea {
   margin: 12px 0;
 }
 
+.radio-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 10px 0;
+  font-weight: 500;
+}
+
+.mode-picker {
+  margin: 14px 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fafbff;
+}
+
+.mode-picker legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+
+.field-help {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 .grid {
   display: grid;
   gap: 12px;

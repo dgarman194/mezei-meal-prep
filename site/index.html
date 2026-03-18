@@ -42,6 +42,19 @@
           Shrimp allowed this week
         </label>
 
+        <fieldset class="mode-picker">
+          <legend>Planning mode</legend>
+          <label class="radio-row">
+            <input type="radio" name="shopping_mode" value="extras_ok" checked />
+            Allow some extra shopping for a better plan
+          </label>
+          <label class="radio-row">
+            <input type="radio" name="shopping_mode" value="inventory_only" />
+            Use only what I already have
+          </label>
+          <p class="field-help">Inventory-only mode tries hard to avoid meals that require missing ingredients.</p>
+        </fieldset>
+
         <div class="grid one">
           <label>Likes (comma-separated)
             <input type="text" name="likes" placeholder="lemon, curry, spicy" />

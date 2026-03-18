@@ -10,6 +10,7 @@ const DEFAULT_INTAKE = {
   preferences: {
     vegetarian: true,
     shrimp_ok: true,
+    shopping_mode: 'extras_ok',
     max_prep_minutes: 120,
     likes: [],
     dislikes: [],
@@ -362,6 +363,7 @@ function buildIntakeFromForm() {
     preferences: {
       vegetarian: true,
       shrimp_ok: fd.get('shrimp_ok') === 'on',
+      shopping_mode: fd.get('shopping_mode') || 'extras_ok',
       max_prep_minutes: parseIntSafe(fd.get('max_prep_minutes'), 120),
       likes: parseListText(fd.get('likes')),
       dislikes: parseListText(fd.get('dislikes')),
@@ -389,7 +391,7 @@ function buildInventoryIndex(intake) {
   return { idx, perishable };
 }
 
-function mealScore(meal, invIdx, perishIdx, dislikes, likes, shrimpOk) {
+function mealScore(meal, invIdx, perishIdx, dislikes, likes, shrimpOk, shoppingMode = 'extras_ok') {
   if (meal.type === 'shrimp' && !shrimpOk) return -10000;
   const nameL = normalize(meal.name);
   for (const d of dislikes) {
@@ -408,13 +410,17 @@ function mealScore(meal, invIdx, perishIdx, dislikes, likes, shrimpOk) {
       missing += 1;
     }
   });
+  if (shoppingMode === 'inventory_only' && missing > 0) {
+    return -2000 - (missing * 25);
+  }
   let likeBonus = 0;
   const mealText = normalize([meal.name, meal.slot, ...meal.ingredients, ...(meal.flavor_tags || [])].join(' '));
   likes.forEach((liked) => {
     const l = normalize(liked);
     if (l && mealText.includes(l)) likeBonus += 2;
   });
-  const base = matched * 3 + perishBonus * 2 - missing;
+  const missingPenalty = shoppingMode === 'inventory_only' ? missing * 12 : missing;
+  const base = matched * 3 + perishBonus * 2 - missingPenalty;
   const proteinBonus = Math.floor((meal.protein_g || 0) / 8);
   const slotBonus = meal.slot === 'breakfast' ? 1 : 0;
   return base + proteinBonus + likeBonus + slotBonus;
@@ -425,9 +431,10 @@ function chooseMealsForSlot(intake, invIdx, perishIdx, slot, desiredCount = 3) {
   const shrimpOk = !!prefs.shrimp_ok;
   const dislikes = prefs.dislikes || [];
   const likes = prefs.likes || [];
+  const shoppingMode = prefs.shopping_mode || 'extras_ok';
   const scored = [];
   MEAL_CATALOG.filter((meal) => meal.slot === slot).forEach((meal) => {
-    const score = mealScore(meal, invIdx, perishIdx, dislikes, likes, shrimpOk);
+    const score = mealScore(meal, invIdx, perishIdx, dislikes, likes, shrimpOk, shoppingMode);
     if (score > -500) scored.push({ score, meal });
   });
   scored.sort((a, b) => (b.score - a.score) || ((b.meal.protein_g || 0) - (a.meal.protein_g || 0)));
@@ -483,7 +490,8 @@ function buildSchedule(selectedMeals) {
   });
 }
 
-function buildShoppingList(allMeals, invIdx) {
+function buildShoppingList(allMeals, invIdx, shoppingMode = 'extras_ok') {
+  if (shoppingMode === 'inventory_only') return {};
   const missing = {};
   const categoryGuess = {
     spinach: 'Produce', onion: 'Produce', garlic: 'Produce', tomato: 'Produce', cucumber: 'Produce',
@@ -609,11 +617,12 @@ function generateWeeklyPlan(intake) {
   const selectedMeals = chooseMeals(intake, idx, perishable);
   const mealLookup = buildMealLookup(selectedMeals.all);
   const schedule = buildSchedule(selectedMeals);
+  const shoppingMode = intake.preferences?.shopping_mode || 'extras_ok';
   return {
     selected_meals: selectedMeals,
     schedule,
     prep_steps: buildPrepSteps(selectedMeals.all),
-    shopping_list: buildShoppingList(selectedMeals.all, idx),
+    shopping_list: buildShoppingList(selectedMeals.all, idx, shoppingMode),
     flavor_playbook: buildFlavorPlaybook(selectedMeals.all),
     macro_summary: buildMacroSummary(schedule, mealLookup, intake),
   };
@@ -837,8 +846,11 @@ function renderResult(intake, plan, validation) {
   const shopping = document.getElementById('shopping-list');
   shopping.innerHTML = '';
   const shoppingEntries = Object.entries(plan.shopping_list || {});
+  const shoppingMode = intake.preferences?.shopping_mode || 'extras_ok';
   if (!shoppingEntries.length) {
-    shopping.innerHTML = '<p>No additions needed.</p>';
+    shopping.innerHTML = shoppingMode === 'inventory_only'
+      ? '<p>Inventory-only mode is on — no shopping additions shown.</p>'
+      : '<p>No additions needed.</p>';
   } else {
     shoppingEntries.forEach(([category, items]) => {
       const h4 = document.createElement('h4');
@@ -908,6 +920,9 @@ function seedForm(intake) {
   document.querySelector('[name="daily_calorie_target"]').value = intake.goals.daily_calorie_target;
   document.querySelector('[name="daily_protein_target_g"]').value = intake.goals.daily_protein_target_g;
   document.querySelector('[name="shrimp_ok"]').checked = !!intake.preferences.shrimp_ok;
+  const shoppingMode = intake.preferences.shopping_mode || 'extras_ok';
+  const shoppingModeEl = document.querySelector(`[name="shopping_mode"][value="${shoppingMode}"]`);
+  if (shoppingModeEl) shoppingModeEl.checked = true;
   document.querySelector('[name="likes"]').value = (intake.preferences.likes || []).join(', ');
   document.querySelector('[name="dislikes"]').value = (intake.preferences.dislikes || []).join(', ');
   document.querySelector('[name="notes"]').value = intake.preferences.notes || '';
